@@ -58,7 +58,8 @@ public class Dijkstra {
                 Location v = graph.getNode(vId);
                 if (v == null) continue; // defensive
 
-                double cost = e.getDistanceMeters(); // currently using distance as weight
+                double cost = e.travelTimeMinutes(e.getDefaultSpeedKmph());
+                // currently using distance as weight
                 double alt = du + cost;
 
                 if (alt < dist.getOrDefault(v, Double.POSITIVE_INFINITY)) {

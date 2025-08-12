@@ -78,6 +78,9 @@ public class UGNavigateApp extends Application {
             }
             sb.append(String.format("\nTotal distance (meters): %.2f", dist));
 
+            double totalTime = computeTravelTime(path, graph);
+            sb.append(String.format("\nEstimated travel time (minutes): %.2f", totalTime));
+
             output.setText(sb.toString());
         });
 
@@ -91,6 +94,23 @@ public class UGNavigateApp extends Application {
         primaryStage.setTitle("UG Navigate - Project Start!");
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    /** Helper method to compute total travel time along the route */
+    private double computeTravelTime(List<Location> path, Graph graph) {
+        double totalTime = 0;
+        for (int i = 0; i < path.size() - 1; i++) {
+            int src = path.get(i).getId();
+            int dst = path.get(i + 1).getId();
+            List<data.Edge> edges = graph.getEdgesFrom(src);
+            for (data.Edge e : edges) {
+                if (e.getDst() == dst) {
+                    totalTime += e.travelTimeMinutes(e.getDefaultSpeedKmph());
+                    break;
+                }
+            }
+        }
+        return totalTime;
     }
 
     public static void main(String[] args) {
