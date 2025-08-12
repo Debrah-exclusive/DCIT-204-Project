@@ -46,9 +46,13 @@ public class CSVLoader {
                 int dst = Integer.parseInt(parts[1].trim());
                 double dist = Double.parseDouble(parts[2].trim());
                 double speed = Double.parseDouble(parts[3].trim());
+
+                // Add both directions for undirected graph
                 g.addEdge(new data.Edge(src, dst, dist, speed));
+                g.addEdge(new data.Edge(dst, src, dist, speed));
             }
         }
         return g;
     }
+
 }
