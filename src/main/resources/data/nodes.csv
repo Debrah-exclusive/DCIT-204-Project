@@ -1,0 +1,11 @@
+id,label,lat,lon,type
+1,Balme Library,5.6501,-0.1869,library
+2,Night Market,5.6492,-0.1865,market
+3,Akuafo Hall,5.6488,-0.1860,hall
+4,Legon Mosque,5.6490,-0.1863,mosque
+5,Sports Stadium,5.6510,-0.1855,stadium
+6,UGMC,5.6522,-0.1862,medical
+7,Main Gate,5.6475,-0.1870,gate
+8,Central Cafeteria,5.6507,-0.1860,cafeteria
+9,Guest Centre,5.6515,-0.1872,guest_centre
+10,Diaspora Hall,5.6519,-0.1865,hall
