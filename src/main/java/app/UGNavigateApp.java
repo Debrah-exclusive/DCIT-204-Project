@@ -62,9 +62,9 @@ public class UGNavigateApp extends Application {
             // Run Dijkstra
             Dijkstra dijkstra = new Dijkstra();
             dijkstra.computeShortestPaths(graph, startLoc.get());
-            double dist = dijkstra.getDistances().getOrDefault(endLoc.get(), Double.POSITIVE_INFINITY);
+            double distOrTime = dijkstra.getDistances().getOrDefault(endLoc.get(), Double.POSITIVE_INFINITY);
 
-            if (Double.isInfinite(dist)) {
+            if (Double.isInfinite(distOrTime)) {
                 output.setText("No path found.");
                 return;
             }
@@ -76,10 +76,20 @@ public class UGNavigateApp extends Application {
             for (Location loc : path) {
                 sb.append(loc.getLabel()).append("\n");
             }
-            sb.append(String.format("\nTotal distance (meters): %.2f", dist));
 
+            // Compute total distance separately by summing edges along path
+            double totalDistanceMeters = computeDistance(path, graph);
+            double distKm = totalDistanceMeters / 1000.0;
+            sb.append(String.format("\nTotal distance: %.2f km", distKm));
+
+            // Compute travel time along path
             double totalTime = computeTravelTime(path, graph);
-            sb.append(String.format("\nEstimated travel time (minutes): %.2f", totalTime));
+            int roundedTime = (int) Math.ceil(totalTime);
+            if (roundedTime <= 1) {
+                sb.append("\nEstimated travel time: less than 1 minute");
+            } else {
+                sb.append("\nEstimated travel time: " + roundedTime + " minutes");
+            }
 
             output.setText(sb.toString());
         });
@@ -111,6 +121,23 @@ public class UGNavigateApp extends Application {
             }
         }
         return totalTime;
+    }
+
+    /** Helper method to compute total distance (in meters) along the route */
+    private double computeDistance(List<Location> path, Graph graph) {
+        double totalDistance = 0;
+        for (int i = 0; i < path.size() - 1; i++) {
+            int src = path.get(i).getId();
+            int dst = path.get(i + 1).getId();
+            List<data.Edge> edges = graph.getEdgesFrom(src);
+            for (data.Edge e : edges) {
+                if (e.getDst() == dst) {
+                    totalDistance += e.getDistanceMeters();
+                    break;
+                }
+            }
+        }
+        return totalDistance;
     }
 
     public static void main(String[] args) {
