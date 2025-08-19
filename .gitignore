@@ -36,3 +36,8 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### Large Files ###
+java17-jdk.msi
+maven.zip
+apache-maven-3.9.5/
